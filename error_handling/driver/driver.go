@@ -11,7 +11,7 @@ import (
 func main() {
 	// This says that set a prefix everytime you land in an error
 	log.SetPrefix("######====> ")
-	// This disables ot
+	// This disables other info while we get errors like timestamp and all
 	log.SetFlags(0)
 
 	message, error := car.StartCar("")
