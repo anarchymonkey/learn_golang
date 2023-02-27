@@ -10,4 +10,12 @@ This consists of all the codes in the golang tutorial -> <https://go.dev/doc/tut
     * Step 3: Create a go module by creating a new file `[fileName].go`
     * Step 4: Write some basic go code in it and to run it type `go run .` or `go run <fileName>`
 
-* [TBD]
+* Important go commands
+  * `go mod init`
+  * `go mod edit`
+  * `go run`
+  * `go test`
+  * `go build`
+  * `go install`
+
+* Continued...
