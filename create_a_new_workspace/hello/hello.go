@@ -8,8 +8,4 @@ import (
 
 func main() {
 	fmt.Println(stringutil.Reverse("Hello"))
-
-	fmt.Println("+++++++++++++++++++++++++++++")
-
-	fmt.Println(stringutil.ToUpperCase("aniket"))
 }
