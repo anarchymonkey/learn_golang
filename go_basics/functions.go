@@ -43,6 +43,14 @@ func DoMultipleOperations(ops string, argumentList []int) int {
 
 	return -1
 }
+
+// closures contain a function inside a function so that it would act as a Higher Order Function
+func showClosures(a int) func(int) (int, error) {
+	return func(b int) (int, error) {
+		return a + b, nil
+	}
+}
+
 func main() {
 	fmt.Println("The result of sumation of two numbers is")
 	fmt.Println(add(1, 2))
@@ -52,5 +60,8 @@ func main() {
 
 	fmt.Println("The result of Named export function is")
 	fmt.Println(DoMultipleOperations("*", []int{1, 2, 3, 4}))
+
+	fmt.Println("The result of the closure function")
+	fmt.Println(showClosures(1)(3))
 
 }
