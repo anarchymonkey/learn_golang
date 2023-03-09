@@ -1,3 +1,3 @@
-module aniket-batabyal.com/go-basics
+module anarchymonkey.com/go-basics
 
 go 1.20
