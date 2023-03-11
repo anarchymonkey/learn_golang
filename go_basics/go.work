@@ -1,7 +1,12 @@
 go 1.20
 
 use (
+	./conditional_statements
 	./datatypes
+	./defer_panic_recover
 	./functions
+	./loops
+	./numeric_constants
+	./typeConversionsAndInferrence
 	./variables
 )
