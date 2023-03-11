@@ -21,10 +21,26 @@ func deferFuncExample() {
 	fmt.Println(calcSum(1.100, 2.200))
 }
 
-func panicFuncExample() {
+func panicFuncExample(randomValue int) {
 
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("The function has recovered", r)
+		}
+	}()
+
+	fmt.Println("Before the panic happened")
+	if randomValue == 10 {
+		panic(fmt.Sprintf("returned value is %d", randomValue))
+	}
+
+	fmt.Println("Normal execution has started")
 }
 
 func main() {
 	deferFuncExample()
+
+	// panic and recover example
+
+	panicFuncExample(10)
 }
