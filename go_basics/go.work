@@ -2,12 +2,14 @@ go 1.20
 
 use (
 	./conditional_statements
+	./data_structures
 	./datatypes
 	./defer_panic_recover
 	./functions
 	./loops
 	./numeric_constants
 	./pointers
+	./structs
 	./typeConversionsAndInferrence
 	./variables
 )
