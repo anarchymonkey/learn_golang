@@ -95,6 +95,23 @@ func learnDynamicArrays() {
 
 	printSlice(dummySlice)
 
+	// Creating a slice with make
+
+	fmt.Println("Creating slices with make, lets see the length and capacity")
+
+	// assigns a length of 5
+	newSlice := make([]int, 5)
+
+	printSlice(newSlice)
+
+	// assigns a capacity of 5
+	newSlice = make([]int, 0, 5)
+
+	newSlice = newSlice[:cap(newSlice)]
+	newSlice = newSlice[0:3]
+
+	printSlice(newSlice)
+
 }
 
 func createSlicesOfSlices() {
@@ -123,7 +140,30 @@ func createSlicesOfSlices() {
 	}
 }
 
-func printSlice[T []int](val T) {
+func appendThingsToSlices() {
+	fmt.Println("This is appending someting to slices")
+
+	someArray := [5]string{
+		"Aniket",
+		"Animesh",
+		"Ankush",
+		"Ankit",
+		"Amaan",
+	}
+
+	someSlice := make([]string, 0)
+
+	for i := 0; i < len(someArray); i++ {
+		someSlice = append(someSlice, someArray[i])
+	}
+
+	someSlice = append(someSlice, "Adding name: Amitava")
+	fmt.Println("Slice after appending")
+	fmt.Println(someSlice)
+	printSlice(someSlice)
+}
+
+func printSlice[T []int | []string](val T) {
 	fmt.Printf("\n len = %v, cap = %v \n", len(val), cap(val))
 }
 
@@ -136,5 +176,11 @@ func main() {
 
 	learnDynamicArrays()
 
+	// create 2D arrays
+
 	createSlicesOfSlices()
+
+	// appendThingsToSlices
+
+	appendThingsToSlices()
 }
