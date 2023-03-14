@@ -50,6 +50,25 @@ func getNonInitAndPostForLoop() {
 
 }
 
+// range is a short form of an iterator used to iterate maps, sets, slices
+func getRangeFormOfLoops() {
+
+	primeNumbers := []int{
+		1,
+		2,
+		3,
+		5,
+		7,
+		11,
+		13,
+	}
+
+	// we can skip index, value by using _ as the underlying value
+	for idx, value := range primeNumbers {
+		fmt.Printf("{index, value} = {%v, %v} ", idx, value)
+	}
+}
+
 func main() {
 
 	// simple for loop
@@ -67,4 +86,7 @@ func main() {
 
 		}
 	*/
+
+	// get Range form loops
+	getRangeFormOfLoops()
 }

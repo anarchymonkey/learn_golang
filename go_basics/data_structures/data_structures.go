@@ -167,6 +167,35 @@ func printSlice[T []int | []string](val T) {
 	fmt.Printf("\n len = %v, cap = %v \n", len(val), cap(val))
 }
 
+/*
+	It should return
+
+	a slice of length dy inside of which each element will be a slice of length dx
+
+*/
+
+func Pic(dx, dy int) [][]byte {
+	picture := make([][]byte, dy)
+
+	for row := 0; row < dy; row++ {
+		picture[row] = make([]byte, dx)
+		for column := 0; column < dx; column++ {
+			fmt.Println("row and column is", row, column)
+			picture[row][column] = byte((row + column) / 2)
+		}
+	}
+	return picture
+}
+
+func sliceExerice() {
+	fmt.Println("recovered", recover())
+	pic := Pic(6, 3)
+
+	for i := 0; i < len(pic); i++ {
+		fmt.Println(pic[i])
+	}
+}
+
 func main() {
 
 	// learn arrays
@@ -183,4 +212,8 @@ func main() {
 	// appendThingsToSlices
 
 	appendThingsToSlices()
+
+	// exercise
+
+	sliceExerice()
 }
