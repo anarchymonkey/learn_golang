@@ -8,6 +8,7 @@ use (
 	./functions
 	./gomaps
 	./loops
+	./methods
 	./numeric_constants
 	./pointers
 	./structs
