@@ -6,6 +6,7 @@ use (
 	./datatypes
 	./defer_panic_recover
 	./functions
+	./gomaps
 	./loops
 	./numeric_constants
 	./pointers
