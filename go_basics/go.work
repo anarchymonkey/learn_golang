@@ -15,5 +15,6 @@ use (
 	./reader
 	./structs
 	./typeConversionsAndInferrence
+	./typeParametersAndGenerics
 	./variables
 )
