@@ -12,6 +12,7 @@ use (
 	./methods
 	./numeric_constants
 	./pointers
+	./reader
 	./structs
 	./typeConversionsAndInferrence
 	./variables
