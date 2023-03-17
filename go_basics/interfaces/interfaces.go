@@ -32,6 +32,58 @@ func printArea(s Shape) {
 	fmt.Println("The area is", s.calcArea())
 }
 
+type DummyInterface interface {
+	validateSquare()
+}
+
+func typeAssertions() {
+	var inter interface{} = "hello"
+
+	defer func() {
+		// this recoveres the panic function if any
+		println("Recovered", recover())
+	}()
+
+	s, ok := inter.(string)
+
+	if ok {
+		fmt.Println("interface type assertion", s)
+	}
+
+	f, floatOk := inter.(float64)
+
+	if floatOk {
+		fmt.Println("Suddenly the type changed to ", f)
+	} else {
+		fmt.Println("Cannot implement other types than the defined one")
+	}
+
+}
+
+func typeSwitches(i interface{}) {
+
+	switch v := i.(type) {
+	case *Square:
+		{
+			fmt.Println("This is a square", v.length)
+		}
+	case *Circle:
+		{
+			fmt.Println("This is a circle", v.radius, v.calcArea())
+		}
+	default:
+		{
+			fmt.Println("This is some unknown type", v)
+		}
+	}
+}
+
+type IPAddr [4]byte
+
+func (ip IPAddr) String() string {
+	return fmt.Sprintf("%d.%d.%d.%d", ip[0], ip[1], ip[2], ip[3])
+}
+
 func main() {
 	var s []Shape
 	var a Shape
@@ -69,6 +121,39 @@ func main() {
 		printArea(shape)
 	}
 
+	// interface values with nil underlying values
+	var nullSquare *Square = &Square{
+		length: 20,
+	}
+	var b DummyInterface = nullSquare
+
+	b.validateSquare()
+
+	// type assertion
+
+	typeAssertions()
+
+	// typeswitches
+
+	for _, shape := range s {
+		typeSwitches(shape)
+	}
+
+	// stringer
+
+	fmt.Println(&square)
+
+	// stringer exercise
+
+	var ipAddrStore map[string]IPAddr = map[string]IPAddr{
+		"loopback":  {127, 0, 0, 1},
+		"googleDNS": {8, 8, 8, 8},
+	}
+
+	for _, value := range ipAddrStore {
+		fmt.Println(value)
+	}
+
 }
 
 func (s *Square) calcArea() float64 {
@@ -81,4 +166,18 @@ func (c *Circle) calcArea() float64 {
 
 func (r *Rectangle) calcArea() float64 {
 	return float64(r.Width) * float64(r.Height)
+}
+
+func (s *Square) validateSquare() {
+
+	if s == nil {
+		fmt.Println("nil")
+		return
+	}
+
+	fmt.Println("Its a validated square")
+}
+
+func (s *Square) String() string {
+	return fmt.Sprintf("The square value is %d", s.length)
 }
