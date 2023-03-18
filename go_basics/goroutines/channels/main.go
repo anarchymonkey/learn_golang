@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func sum(nums []int, c chan int) {
 	length := len(nums)
@@ -11,6 +14,32 @@ func sum(nums []int, c chan int) {
 
 	fmt.Println("Sending to channel")
 	c <- sum
+}
+
+func fibonacci(num int, c chan int) {
+	x, y := 0, 1
+
+	for i := 0; i < num; i++ {
+		c <- x
+		x, y = y, x+y
+	}
+
+	close(c)
+}
+
+func fibonacciWithSelectOps(c, quit chan int) {
+
+	x, y := 0, 1
+
+	for {
+		select {
+		case c <- x:
+			x, y = y, x+y
+		case <-quit:
+			fmt.Println("Quitting")
+			return
+		}
+	}
 }
 
 func main() {
@@ -38,4 +67,58 @@ func main() {
 
 	fmt.Println("first", <-channel_v1)
 	fmt.Println("second", <-channel_v1)
+
+	// range and close
+
+	var fiboChannel chan int = make(chan int, 10)
+
+	go fibonacci(cap(fiboChannel), fiboChannel)
+
+	// this will recieve values untill the channel is closed
+	for i := range fiboChannel {
+		fmt.Println(i)
+	}
+
+	// ******************* END ************************* //
+
+	// select operations
+
+	// a select operation lets a goroutine wait on multiple communication operations
+
+	selectChan, quit := make(chan int, 15), make(chan int)
+
+	go func() {
+		for i := 0; i < 10; i++ {
+			fmt.Println("val", <-selectChan)
+		}
+		quit <- 0
+	}()
+
+	fibonacciWithSelectOps(selectChan, quit)
+
+	// select statement with default
+
+	fmt.Println("\n")
+
+	timer := time.Tick(100 * time.Millisecond)
+	boomer := time.After(500 * time.Millisecond)
+
+	// default runs if the channels are not ready (i.e the cases inside are not reade)
+
+	// here the timer runs after every 100 * milisecond delta
+	// boom runs after every 500 miliseconds * delta
+	// before these two are ready the default case runs and sleeps the programme for 25 * delta miliseconds (1/4 th of timer)
+	for {
+		select {
+		case <-timer:
+			fmt.Println("Ticking")
+		case <-boomer:
+			fmt.Println("Boom! The programme exploded")
+			return
+		default:
+			fmt.Println("....")
+			time.Sleep(25 * time.Millisecond)
+		}
+	}
+
 }
