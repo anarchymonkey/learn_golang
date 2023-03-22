@@ -25,7 +25,15 @@ import (
 */
 
 func connectHandler() {
-	dbUrl := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", "localhost", 5432, "<your_username>", "<your_pass>", "postgres")
+
+	env := os.Environ()
+
+	for _, val := range env {
+		fmt.Println(val)
+	}
+	dbUrl := fmt.Sprintf(
+		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", "localhost", 5432, os.Getenv("PG_USERNAME_V1"), os.Getenv("PG_PASS_V1"), "postgres",
+	)
 
 	os.Setenv("DATABASE_CONFIG", dbUrl)
 
@@ -40,7 +48,7 @@ func connectHandler() {
 
 	var greeting string
 
-	err = connection.QueryRow(context.Background(), "select 'Hello World'").Scan(&greeting)
+	err = connection.QueryRow(context.Background(), "select name from dummy_table;").Scan(&greeting)
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to query row %v", err)
