@@ -1,0 +1,9 @@
+go 1.20
+
+use (
+	./connect_with_a_database
+	./develop_restful_API_using_gin
+	./go_basics
+	./hello_go
+	./learn_fuzzing
+)

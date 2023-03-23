@@ -5,32 +5,23 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v5"
 )
 
-// package that we will use database/sql
-
-/*
-	Things you will learn
-
-
-	Set up a database.
-	Import the database driver.
-	Get a database handle and connect.
-	Query for multiple rows.
-	Query for a single row.
-	Add data.
-
-
-*/
+type DummyTable struct {
+	Id    int    `json:"id"`
+	Name  string `json:"name"`
+	Age   int    `json:"age"`
+	Email string `json:"email"`
+}
 
 func connectHandler() {
 
-	env := os.Environ()
+	// env := os.Environ()
 
-	for _, val := range env {
-		fmt.Println(val)
-	}
+	// for _, val := range env {
+	// 	fmt.Println(val)
+	// }
 	dbUrl := fmt.Sprintf(
 		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", "localhost", 5432, os.Getenv("PG_USERNAME_V1"), os.Getenv("PG_PASS_V1"), "postgres",
 	)
@@ -46,17 +37,29 @@ func connectHandler() {
 
 	defer connection.Close(context.Background())
 
-	var greeting string
+	// rows, err := connection.Query(context.Background(), "select * from dummy_table;")
 
-	err = connection.QueryRow(context.Background(), "select name from dummy_table;").Scan(&greeting)
+	// err = pgxscan.Select(context.Background(), connection, &rows, "select * from dummy_table;")
+
+	// if err != nil {
+	// 	fmt.Fprintf(os.Stderr, "The error is \n %v", err)
+	// 	os.Exit(1)
+	// }
+
+	rows, err := connection.Query(context.Background(), "select * from dummy_table")
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to query row %v", err)
+		fmt.Fprintf(os.Stderr, "There is a error while querying \n %v", err)
 		os.Exit(1)
 	}
 
-	fmt.Println(greeting)
+	defer rows.Close()
 
+	datas, _ := pgx.CollectRows(rows, pgx.RowToAddrOfStructByName[DummyTable])
+
+	for _, data := range datas {
+		fmt.Println("data is", data.Name)
+	}
 }
 
 func main() {
