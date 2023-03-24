@@ -32,6 +32,21 @@ func printAllRowsInTable(conn *pgx.Conn) {
 	}
 }
 
+func printRowAfterDeleting(conn *pgx.Conn) {
+	const QUERY = "DELETE FROM dummy_table WHERE id=$1"
+
+	row, err := conn.Exec(context.Background(), QUERY, 15)
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error while deleting data into the table \n %v", err)
+		os.Exit(1)
+	}
+
+	fmt.Println(row.RowsAffected())
+	fmt.Println("Row after deleting")
+	printRowInTable(conn, 15)
+}
+
 func printRowAfterInserting(conn *pgx.Conn) {
 	const QUERY = "INSERT INTO dummy_table(id, name, age, email) values($1,$2,$3,$4);"
 
@@ -44,7 +59,7 @@ func printRowAfterInserting(conn *pgx.Conn) {
 
 	fmt.Println(row.RowsAffected())
 	fmt.Println("Row after inserting")
-	printRowInTable(conn, 14)
+	printRowInTable(conn, 15)
 }
 
 func printRowAfterUpdating(conn *pgx.Conn) {
@@ -108,5 +123,8 @@ func main() {
 
 	fmt.Println(("\nUpdating one row in dummy table"))
 	printRowAfterUpdating(conn)
+
+	fmt.Println(("\nDeleting one row in dummy table"))
+	printRowAfterDeleting(conn)
 
 }
