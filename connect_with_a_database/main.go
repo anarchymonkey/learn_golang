@@ -15,6 +15,42 @@ type DummyTable struct {
 	Email string `json:"email"`
 }
 
+func executeEverythingInASingleTransacton(conn *pgx.Conn) {
+
+	tx, err := conn.Begin(context.Background())
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "The erros while begining a transaction is \n%v", err)
+		os.Exit(1)
+	}
+
+	defer tx.Rollback(context.Background())
+
+	row, err := tx.Exec(context.Background(), "INSERT INTO dummy_table(id, name, age, email) values($1, $2, $3, $4)", 18, "Tula", 52, "amitava@gmail.com")
+
+	errRow, errorInSecondInsert := tx.Exec(context.Background(), "INSERT INTO dummy_table(id, name, age, email) values($1, $2, $3, $4)", 19, "Ashneer", 57, "amitava@gmail.com")
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error while executing a transaction query \n%v", err)
+		os.Exit(1)
+	}
+
+	if errorInSecondInsert != nil {
+		fmt.Fprintf(os.Stderr, "error while executing a transaction query \n%v", errorInSecondInsert)
+		os.Exit(1)
+	}
+
+	fmt.Println("Rows affected in this transaction", row.RowsAffected(), errRow.RowsAffected())
+
+	err = tx.Commit(context.Background())
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "The error while commiting is \n%v", err)
+		os.Exit(1)
+	}
+
+}
+
 func printAllRowsInTable(conn *pgx.Conn) {
 	rows, err := conn.Query(context.Background(), "select * from dummy_table")
 
@@ -109,6 +145,8 @@ func getDBConnectionHandler() *pgx.Conn {
 
 func main() {
 
+	// Comment insert and update whenever needed
+
 	conn := getDBConnectionHandler()
 	defer conn.Close(context.Background())
 
@@ -127,4 +165,6 @@ func main() {
 	fmt.Println(("\nDeleting one row in dummy table"))
 	printRowAfterDeleting(conn)
 
+	fmt.Println("\nExecuting in a single transaction")
+	executeEverythingInASingleTransacton(conn)
 }
